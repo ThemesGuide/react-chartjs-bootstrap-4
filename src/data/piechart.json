@@ -1,0 +1,14 @@
+{
+    "labels": ["Flip", "Flap", "Flop"],
+    "datasets": [
+    {
+        "backgroundColor": ["lime","lightgreen","seagreen"],
+        "borderWidth": 0,
+        "data": [
+        65,
+        35,
+        25
+      ]
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "name": "react-chartjs-bootstrap",
+  "version": "1.0.0",
+  "description": "A single page app with Chart.js, React and Bootstrap 4",
+  "keywords": [
+    "react",
+    "bootstrap",
+    "chart",
+    "charts",
+    "graph",
+    "chartjs"
+  ],
+  "author": "Themes.guide",
+  "license": "MIT",
+  "main": "src/index.js",
+  "dependencies": {
+    "react": "16.4.2",
+    "react-dom": "16.4.2",
+    "react-scripts": "1.1.4",
+    "chart.js": "2.7.2",
+    "react-chartjs-2": "2.7.4",
+    "jquery": "^3.3.1",
+    "bootstrap": "^4.1.3",
+    "popper.js": "^1.14.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  }
+}
