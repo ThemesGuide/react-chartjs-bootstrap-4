@@ -16,9 +16,11 @@ export const HeaderHtml = () => {
                   </div>
                   <div className="col-lg text-center text-lg-left">
                     <h1 className="font-weight-light d-inline">
-                      <span className="text-dark">React Chart.js App</span>
+                      <span className="text-light">React Chart.js App</span>
                     </h1>
-                    <h6>A working template with Bootstrap 4</h6>
+                    <h6 className="text-white font-weight-light">
+                      A working template with Bootstrap 4
+                    </h6>
                     <span className="badge badge-light badge-pill mr-1">
                       reactjs
                     </span>

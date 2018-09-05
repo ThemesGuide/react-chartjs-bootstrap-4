@@ -24,33 +24,33 @@ defaults.global.legend.labels.fontSize = 12;
 const colors = [
   {
     // blue
-    borderWidth: 1.5,
-    borderColor: "rgba(111,157,195,1)",
-    backgroundColor: "rgba(111,157,195,0.4)",
+    borderWidth: 0,
+    borderColor: "rgba(101,147,185,1)",
+    backgroundColor: ["rgba(101,147,185,0.8)"],
     pointBackgroundColor: "rgba(255,255,255,0.8)",
-    pointBorderColor: "rgba(111,157,195,1)",
+    pointBorderColor: "rgba(101,147,185,1)",
     pointHoverBorderColor: "magenta",
-    pointHoverBorderWidth: 2
+    pointHoverBorderWidth: 1
   },
   {
     // pinky
-    borderWidth: 1.5,
+    borderWidth: 0,
     borderColor: "rgba(220,120,220,1)",
     backgroundColor: "rgba(220,120,220,0.8)",
     pointBackgroundColor: "rgba(255,255,255,0.8)",
     pointBorderColor: "rgba(220,120,220,1)",
-    pointHoverBorderColor: "magenta",
-    pointHoverBorderWidth: 2
+    pointHoverBorderColor: "#333",
+    pointHoverBorderWidth: 1
   },
   {
     // red
-    borderWidth: 1.5,
+    borderWidth: 0,
     borderColor: "rgba(247,70,74,1)",
     backgroundColor: "rgba(247,70,74,0.7)",
     pointBackgroundColor: "rgba(255,255,255,0.8)",
     pointBorderColor: "rgba(247,70,74,1)",
     pointHoverBorderColor: "rgba(0,0,0,0.7)",
-    pointHoverBorderWidth: 2,
+    pointHoverBorderWidth: 1,
     pointHoverBackgroundColor: "rgba(247,70,74,1)"
   },
   {
@@ -66,10 +66,8 @@ export class Charts extends React.Component {
   constructor(props) {
     super(props);
 
-    this.UpdateLiveData = this.UpdateLiveData.bind(this);
     this.state = {
-      messages: [],
-      dataLineChart: dataLineChart
+      dataLineChart: this.mergeColorsIntoData(dataLineChart)
     };
   }
 
@@ -118,7 +116,10 @@ export class Charts extends React.Component {
   }
 
   mergeColorsIntoData(srcData) {
-    /* this function merges from "global" colors array into datadset colors */
+    /* This function merges from a "global" colors array into datadset 
+     * colors. This allow us to dynamically change the colors and keep
+     * the color definitions separate from the data.
+    */
     return {
       ...srcData,
       datasets: srcData.datasets.map((dataset, k) => {
@@ -127,29 +128,36 @@ export class Charts extends React.Component {
     };
   }
 
-  UpdateLiveData(idx) {
-    /* mark this message as read */
-    let messages = [...this.state.messages];
-    messages[idx].read = true;
-    this.setState({ messages });
-  }
-
-  render() {
-    const ldata = {
-      ...dataLineChart,
-      datasets: dataLineChart.datasets.map((dataset, k) => {
+  mergeColorsIntoPieData(srcData) {
+    /* This function merges from "global" colors array into pie data colors. 
+     * Since pie charts use an arr of backgroundColor for each pie segment, we
+     * resample from the other color arr indexes and push onto backgroundColor
+    */
+    return {
+      ...srcData,
+      datasets: srcData.datasets.map((dataset, k) => {
+        colors[k].backgroundColor = [colors[k].backgroundColor.toString()];
+        colors[k].backgroundColor.push(
+          colors[k + 1].backgroundColor.toString()
+        );
+        colors[k].backgroundColor.push(
+          colors[k + 2].backgroundColor.toString()
+        );
         return { ...dataset, ...colors[k] };
       })
     };
+  }
 
+  render() {
     return (
       <div className="row">
         <div className="col-lg-6 py-3">
           <div className="card shadow">
             <div className="card-body text-center">
-              <h4>Line</h4>
+              <h4 className="mb-4">Line</h4>
               <Line
-                data={this.mergeColorsIntoData(dataLineChart)}
+                ref="chart1"
+                data={this.mergeColorsIntoData(this.state.dataLineChart)}
                 options={this.optionsLine()}
               />
             </div>
@@ -158,7 +166,7 @@ export class Charts extends React.Component {
         <div className="col-lg-6 py-3">
           <div className="card shadow">
             <div className="card-body text-center">
-              <h4>Bar</h4>
+              <h4 className="mb-4">Bar</h4>
               <Bar
                 data={this.mergeColorsIntoData(dataBarChart)}
                 options={this.optionsBar()}
@@ -169,23 +177,26 @@ export class Charts extends React.Component {
         <div className="col-sm-6 py-3">
           <div className="card shadow">
             <div className="card-body text-center">
-              <h4>Pie</h4>
-              <Pie data={dataPieChart} />
+              <h4 className="mb-4">Pie</h4>
+              <Pie data={this.mergeColorsIntoPieData(dataPieChart)} />
             </div>
           </div>
         </div>
         <div className="col-sm-6 py-3">
           <div className="card shadow">
             <div className="card-body text-center">
-              <h4>Donut</h4>
-              <Donut data={dataPieChart} options={this.optionsDonut()} />
+              <h4 className="mb-4">Donut</h4>
+              <Donut
+                options={this.optionsDonut()}
+                data={this.mergeColorsIntoPieData(dataPieChart)}
+              />
             </div>
           </div>
         </div>
         <div className="col-lg-6 py-3">
           <div className="card shadow">
             <div className="card-body text-center">
-              <h4>Bubble</h4>
+              <h4 className="mb-4">Bubble</h4>
               <Bubble
                 data={this.mergeColorsIntoData(dataBubbleChart)}
                 options={{ legend: { display: false } }}
@@ -196,7 +207,7 @@ export class Charts extends React.Component {
         <div className="col-lg-6 py-3">
           <div className="card shadow">
             <div className="card-body text-center">
-              <h4>Radar</h4>
+              <h4 className="mb-4">Radar</h4>
               <Radar data={this.mergeColorsIntoData(dataBarChart)} />
             </div>
           </div>

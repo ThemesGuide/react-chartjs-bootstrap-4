@@ -2,7 +2,7 @@
     "labels": ["Flip", "Flap", "Flop"],
     "datasets": [
     {
-        "backgroundColor": ["lime","lightgreen","seagreen"],
+        "backgroundColor": ["yellow","pink","lime"],
         "borderWidth": 0,
         "data": [
         65,
